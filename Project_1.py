@@ -51,19 +51,7 @@ all_uppercase_word_count = 0
 lowercase_word_count = 0
 numbers = 0
 numbers_sum = 0
-len_1 = 0
-len_2 = 0
-len_3 = 0
-len_4 = 0
-len_5 = 0
-len_6 = 0
-len_7 = 0
-len_8 = 0
-len_9 = 0
-len_10 = 0
-len_11 = 0
-len_12 = 0
-len_13 = 0
+
 
 
 
@@ -73,11 +61,11 @@ if username in registered.keys() and password == registered[username]:
 Welcome to the app {username}
 We have 3 texts to be analyzed.
 ----------------------------------------""")
-    selection = int(input("Enter a number btw. 1 and 3 to select: "))
-    if 0 < selection < 4:
-        stripped = TEXTS[selection-1].replace(",","").replace(".","")
+    selection = input("Enter a number btw. 1 and 3 to select: ")
+    if selection.isnumeric() and 0 < int(selection) < 4:
+        stripped = TEXTS[int(selection)-1].replace(",","").replace(".","")    
     else:
-        print("Wrong number entered. Please try again and select between 1 and 3.")
+        print("Wrong input. Please try again and type \"1\", \"2\" or \"3\".")
         exit()
 else:
     print("unregistered user, terminating the program..")
@@ -85,6 +73,7 @@ else:
 
 
 words = stripped.split()
+word_length_counts = {}
 
 for word in words:
     word_count += 1
@@ -102,48 +91,11 @@ for word in words:
         numbers += 1
         numbers_sum += int(word)
 
-    if len(word) == 1:
-        len_1 += 1
-    elif len(word) == 2:
-        len_2 += 1
-    elif len(word) == 3:
-        len_3 += 1
-    elif len(word) == 4:
-        len_4 += 1
-    elif len(word) == 5:
-        len_5 += 1
-    elif len(word) == 6:
-        len_6 += 1
-    elif len(word) == 7:
-        len_7 += 1
-    elif len(word) == 8:
-        len_8 += 1
-    elif len(word) == 9:
-        len_9 += 1
-    elif len(word) == 10:
-        len_10 += 1
-    elif len(word) == 11:
-        len_11 += 1
-    elif len(word) == 12:
-        len_12 += 1
-    elif len(word) == 13:
-        len_13 += 1
-
-len_all = [
-    (1, "*" * len_1),
-    (2, "*" * len_2),
-    (3, "*" * len_3),
-    (4, "*" * len_4),
-    (5, "*" * len_5),
-    (6, "*" * len_6),
-    (7, "*" * len_7),
-    (8, "*" * len_8),
-    (9, "*" * len_9),
-    (10, "*" * len_10),
-    (11, "*" * len_11),
-    (12, "*" * len_12),
-    (13, "*" * len_13)
-]
+    length = len(word)
+    if length in word_length_counts:
+        word_length_counts[length] += 1
+    else:
+        word_length_counts[length] = 1
 
 
 print(f"""There are {word_count} words in the selected text.
@@ -155,5 +107,5 @@ The sum of all the numbers {numbers_sum}
 ----------------------------------------
 LEN|    OCCURENCES      |NR.
 ----------------------------------------""")
-for len_ in len_all:
-    print(f"{len_[0]:>3}|{len_[1]:<20}|{len(len_[1])}")
+for length, count in sorted(word_length_counts.items()):
+    print(f"{length:>3}|{(count*"*"):<20}|{count}")
